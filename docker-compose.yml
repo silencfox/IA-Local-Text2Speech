@@ -1,4 +1,19 @@
 services:
+
+  xtts:
+    build: ./expressive_api
+    image: kdvops/xtts-expressive:latest
+    ports:
+      - "8020:8020"       # opcional publicar
+    environment:
+      XTTS_LANG: "es"
+      # USE_GPU: "1"      # si usas imagen CUDA y ejecutas con --gpus
+    deploy:
+      resources:
+        limits:
+          cpus: '4.0'
+          memory: 6g
+
   tts-api:
     image: kdvops/tts-piper:latest   # o build: .
     container_name: tts-api
@@ -6,6 +21,10 @@ services:
       DEFAULT_VOICE: "es_ES"
       DEFAULT_VOICE_ONNX_URL: "https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx"
       DEFAULT_VOICE_JSON_URL: "https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json"
+      #EXPRESSIVE_API_URL: "http://xtts:8020/generate"   # <- si agregas motor premium
+      EXPRESSIVE_API_URL_XTTS: "http://xtts:8020/generate"
+      #EXPRESSIVE_API_URL_BARK: "http://bark:8030/generate"
+      #EXPRESSIVE_API_URL_OPENVOICE: "http://openvoice:8040/generate"
     volumes:
       - ./data:/data
     expose:

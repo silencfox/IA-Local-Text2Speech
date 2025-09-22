@@ -10,21 +10,27 @@
   <div class="wrap">
     <header>
       <h1>KDvops – Portal TTS</h1>
-      <p>Convierte texto a voz. Servido con Nginx, API en <code>/api</code>.</p>
+      <p>Convierte texto a voz. API en <code>/api</code> (mismo origen).</p>
     </header>
 
     <section class="card">
       <form id="ttsForm">
         <label>
           <span>Texto</span>
-          <textarea id="text" rows="5" required>Hola, soy KDvops. Orquestando nubes con automatización.</textarea>
+          <textarea id="text" rows="6" required>Hola, soy KDvops. Orquestando nubes con automatización.</textarea>
         </label>
 
         <div class="grid-3">
           <label>
-            <span>Voz (alias)</span>
-            <input id="voice" type="text" placeholder="es_ES" />
+            <span>Motor</span>
+            <select id="engine">
+              <option value="piper" selected>Piper (Actual)</option>
+              <option value="xtts">XTTS v2</option>
+              <option value="bark">Bark</option>
+              <option value="openvoice">OpenVoice</option>
+            </select>
           </label>
+
           <label>
             <span>Formato</span>
             <select id="fmt">
@@ -32,8 +38,9 @@
               <option value="wav">WAV</option>
             </select>
           </label>
+
           <label>
-            <span>Preset</span>
+            <span>Preset (Piper)</span>
             <select id="preset">
               <option value="">(ninguno)</option>
               <option value="narracion">narracion</option>
@@ -43,22 +50,52 @@
           </label>
         </div>
 
-        <details>
-          <summary>Parámetros avanzados</summary>
+        <details id="piperOpts" open>
+          <summary>Parámetros Piper</summary>
           <div class="grid-3">
-            <label><span>length_scale</span><input id="lengthScale" type="number" step="0.01" min="0.5" max="2.0" value="0.9"/></label>
-            <label><span>noise_scale</span><input id="noiseScale" type="number" step="0.01" min="0.0" max="1.0" value="0.5"/></label>
+            <label><span>Voz (alias)</span><input id="voice" type="text" placeholder="es_ES" /></label>
+            <label><span>length_scale</span><input id="lengthScale" type="number" step="0.01" min="0.5" max="2.0" value="0.90"/></label>
+            <label><span>noise_scale</span><input id="noiseScale" type="number" step="0.01" min="0.0" max="1.0" value="0.50"/></label>
+          </div>
+          <div class="grid-3">
             <label><span>sentence_silence</span><input id="sentenceSilence" type="number" step="0.01" min="0.0" max="1.0" value="0.35"/></label>
+            <label class="chip"><input id="postprocess" type="checkbox" checked /> Postproceso (loudnorm+comp+deesser+fade)</label>
+            <label class="chip"><input id="savePreset" type="checkbox" /> Guardar preset para User ID</label>
           </div>
           <div class="grid-2">
             <label><span>ONNX URL (opcional)</span><input id="onnxUrl" type="url" placeholder="https://.../voice.onnx" /></label>
             <label><span>JSON URL (opcional)</span><input id="jsonUrl" type="url" placeholder="https://.../voice.onnx.json" /></label>
           </div>
+          <div class="grid-2">
+            <label><span>User ID</span><input id="userId" type="text" placeholder="kelvin" /></label>
+          </div>
+          <div class="row">
+            <div class="chip">SSML-light:
+              <button type="button" class="ghost" id="btnBreak">+ &lt;break 400ms&gt;</button>
+              <button type="button" class="ghost" id="btnEmph">+ &lt;emphasis&gt;</button>
+              <button type="button" class="ghost" id="btnProsodySlow">+ &lt;prosody rate="slow"&gt;</button>
+              <button type="button" class="ghost" id="btnProsodyFast">+ &lt;prosody rate="fast"&gt;</button>
+            </div>
+          </div>
+        </details>
+
+        <details id="exprOpts">
+          <summary>Parámetros Expresivos (XTTS/Bark/OpenVoice)</summary>
+          <div class="grid-3">
+            <label><span>Voz externa</span><input id="xVoice" type="text" placeholder="depende del motor"/></label>
+            <label><span>Estilo</span><input id="xStyle" type="text" placeholder="narration / conversational"/></label>
+            <label><span>Idioma</span><input id="xLang" type="text" value="es"/></label>
+          </div>
+          <div class="grid-2">
+            <label><span>speed</span><input id="xSpeed" type="number" step="0.01" min="0.5" max="1.5" value="1.0"/></label>
+            <label><span>temperature</span><input id="xTemp" type="number" step="0.01" min="0.1" max="1.5" value="0.8"/></label>
+          </div>
         </details>
 
         <div class="actions">
           <button type="submit" id="btnSpeak">Sintetizar</button>
-          <button type="button" id="btnVoices" class="secondary">Listar voces</button>
+          <button type="button" id="btnVoices" class="secondary">Listar voces (Piper)</button>
+          <button type="button" id="btnSavePreset" class="secondary">Guardar preset (Piper)</button>
         </div>
       </form>
     </section>
@@ -67,9 +104,7 @@
       <h2>Resultado</h2>
       <div id="status"></div>
       <audio id="player" controls></audio>
-      <div style="margin-top:8px">
-        <a id="downloadLink" href="#" download>Descargar audio</a>
-      </div>
+      <div style="margin-top:8px"><a id="downloadLink" href="#" download>Descargar audio</a></div>
       <pre id="voicesOut" class="hidden"></pre>
     </section>
 

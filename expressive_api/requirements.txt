@@ -1,0 +1,4 @@
+fastapi
+uvicorn[standard]
+soundfile
+TTS    # librería de Coqui (incluye XTTS v2)
