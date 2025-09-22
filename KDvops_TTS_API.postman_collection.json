@@ -1,0 +1,162 @@
+{
+  "info": {
+    "name": "KDvops TTS (Piper) – API",
+    "_postman_id": "d9b8a5fe-7c2a-4f7e-b0cf-tts-collection",
+    "description": "Colección Postman para consumir la API KDvops TTS (FastAPI + Piper).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "type": "string"
+    },
+    {
+      "key": "voice",
+      "value": "es_ES",
+      "type": "string"
+    },
+    {
+      "key": "fmt",
+      "value": "mp3",
+      "type": "string"
+    },
+    {
+      "key": "sample_text",
+      "value": "Hola, soy KDvops. Orquestando nubes con automatización.",
+      "type": "string"
+    },
+    {
+      "key": "onnx_url",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "json_url",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Health – GET /healthz",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/healthz",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "healthz"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "pm.test('ok true', function () { pm.expect(pm.response.json().ok).to.eql(true); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Root – GET /",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            ""
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Voices – GET /voices",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/voices",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "voices"
+          ]
+        }
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Speak – POST /speak (MP3 por defecto)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"text\": \"{{sample_text}}\",\n  \"voice\": \"{{voice}}\",\n  \"onnx_url\": \"{{onnx_url}}\",\n  \"json_url\": \"{{json_url}}\",\n  \"fmt\": \"{{fmt}}\",\n  \"length_scale\": 1.0,\n  \"noise_scale\": 0.667,\n  \"sentence_silence\": 0.2\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/speak",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "speak"
+          ]
+        }
+      },
+      "response": [],
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Status code is 200', function () { pm.response.to.have.status(200); });",
+              "// Guardar audio binario no es directo en Postman; sugerencia: usar curl o Newman para descargar."
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+services:
+  tts:
+    build: .
+    image: kdvops/tts-piper:latest
+    ports:
+      - "8080:8080"
+    environment:
+      DEFAULT_VOICE: "es_ES"
+      DEFAULT_VOICE_ONNX_URL: "https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx"
+      DEFAULT_VOICE_JSON_URL: "https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json"
+    volumes:
+      - ./data:/data

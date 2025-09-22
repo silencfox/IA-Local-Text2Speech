@@ -1,0 +1,5 @@
+fastapi==0.114.2
+uvicorn[standard]==0.30.6
+piper-tts==1.2.0
+aiohttp==3.10.5
+PyYAML==6.0.2

@@ -1,0 +1,46 @@
+# Archivos y carpetas de control de versiones
+.git
+.gitignore
+.gitattributes
+
+# Carpeta de datos (modelos y audios locales, no deben ir dentro de la imagen)
+data/
+
+# Entornos virtuales
+venv/
+.venv/
+ENV/
+env/
+
+# Cachés de Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pdb
+*.pkl
+*.egg-info/
+*.egg
+*.log
+
+# Archivos temporales
+*.swp
+*.swo
+*.tmp
+*.bak
+*.part
+
+# Archivos del sistema/IDE
+.DS_Store
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# Docker compose y overrides (no son necesarios dentro del contenedor)
+docker-compose.yml
+docker-compose.override.yml
+
+# Archivos de configuración local
+.env
+.env.*
