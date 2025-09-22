@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KDvops – Portal TTS</title>
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>KDvops – Portal TTS</h1>
+      <p>Convierte texto a voz. Servido con Nginx, API en <code>/api</code>.</p>
+    </header>
+
+    <section class="card">
+      <form id="ttsForm">
+        <label>
+          <span>Texto</span>
+          <textarea id="text" rows="5" required>Hola, soy KDvops. Orquestando nubes con automatización.</textarea>
+        </label>
+
+        <div class="grid-3">
+          <label>
+            <span>Voz (alias)</span>
+            <input id="voice" type="text" placeholder="es_ES" />
+          </label>
+          <label>
+            <span>Formato</span>
+            <select id="fmt">
+              <option value="mp3" selected>MP3</option>
+              <option value="wav">WAV</option>
+            </select>
+          </label>
+          <label>
+            <span>Preset</span>
+            <select id="preset">
+              <option value="">(ninguno)</option>
+              <option value="narracion">narracion</option>
+              <option value="asistente">asistente</option>
+              <option value="enfatico">enfatico</option>
+            </select>
+          </label>
+        </div>
+
+        <details>
+          <summary>Parámetros avanzados</summary>
+          <div class="grid-3">
+            <label><span>length_scale</span><input id="lengthScale" type="number" step="0.01" min="0.5" max="2.0" value="0.9"/></label>
+            <label><span>noise_scale</span><input id="noiseScale" type="number" step="0.01" min="0.0" max="1.0" value="0.5"/></label>
+            <label><span>sentence_silence</span><input id="sentenceSilence" type="number" step="0.01" min="0.0" max="1.0" value="0.35"/></label>
+          </div>
+          <div class="grid-2">
+            <label><span>ONNX URL (opcional)</span><input id="onnxUrl" type="url" placeholder="https://.../voice.onnx" /></label>
+            <label><span>JSON URL (opcional)</span><input id="jsonUrl" type="url" placeholder="https://.../voice.onnx.json" /></label>
+          </div>
+        </details>
+
+        <div class="actions">
+          <button type="submit" id="btnSpeak">Sintetizar</button>
+          <button type="button" id="btnVoices" class="secondary">Listar voces</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="result" class="card hidden">
+      <h2>Resultado</h2>
+      <div id="status"></div>
+      <audio id="player" controls></audio>
+      <div style="margin-top:8px">
+        <a id="downloadLink" href="#" download>Descargar audio</a>
+      </div>
+      <pre id="voicesOut" class="hidden"></pre>
+    </section>
+
+    <footer><small>© KDvops — Portal TTS</small></footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>

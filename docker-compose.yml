@@ -1,12 +1,22 @@
 services:
-  tts:
-    build: .
-    image: kdvops/tts-piper:latest
-    ports:
-      - "8080:8080"
+  tts-api:
+    image: kdvops/tts-piper:latest   # o build: .
+    container_name: tts-api
     environment:
       DEFAULT_VOICE: "es_ES"
       DEFAULT_VOICE_ONNX_URL: "https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx"
       DEFAULT_VOICE_JSON_URL: "https://huggingface.co/rhasspy/piper-voices/resolve/main/es/es_MX/claude/high/es_MX-claude-high.onnx.json"
     volumes:
       - ./data:/data
+    expose:
+      - "8080"         # expuesto a la red interna
+    ports:
+      - "8080:8080"  # opcional si también quieres entrar directo a la API
+
+  tts-portal:
+    build: ./portal
+    container_name: tts-portal
+    ports:
+      - "8089:80"      # portal público en http://localhost:8089
+    depends_on:
+      - tts-api

@@ -7,11 +7,17 @@ import os, uuid
 
 from .utils import ensure_voice, synthesize_wav, wav_to_mp3, list_installed_voices, AUDIO_DIR
 
+from fastapi.middleware.cors import CORSMiddleware
+
+
+
+
 DEFAULT_VOICE = os.getenv("DEFAULT_VOICE", "es_ES")
 DEFAULT_ONNX_URL = os.getenv("DEFAULT_VOICE_ONNX_URL")
 DEFAULT_JSON_URL = os.getenv("DEFAULT_VOICE_JSON_URL")
 
 app = FastAPI(title="KDvops TTS (Piper)", version="1.0")
+
 
 class SpeakIn(BaseModel):
     text: str
@@ -22,6 +28,15 @@ class SpeakIn(BaseModel):
     length_scale: float = 1.0
     noise_scale: float = 0.667
     sentence_silence: float = 0.2
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],   # o limita a tu dominio
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 @app.get("/")
 async def root():

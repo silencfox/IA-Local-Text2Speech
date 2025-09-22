@@ -14,3 +14,15 @@ curl -s -X POST http://localhost:8080/speak \
     "voice": "es_ES"
   }' \
   --output salida.mp3
+
+
+## Sintetizar texto
+curl -s -X POST "{{base_url}}/speak" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "text": "{{sample_text}}",
+    "voice": "{{voice}}",
+    "onnx_url": "{{onnx_url}}",
+    "json_url": "{{json_url}}",
+    "fmt": "{{fmt}}"
+  }' --output salida.mp3
